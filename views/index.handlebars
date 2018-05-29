@@ -1,38 +1,13 @@
-<h1>Welcome to Bobs Burgers!</h1>
+<h1>Welcome to the Krusty Krab!</h1>
+<img src="./assets/img/krabbypatty400x400.jpg">
 
-<h2>Cats that are not sleepy!</h2>
-
-<ul>
-  {{#each cats}}
-    {{#unless sleepy}}
-      {{> cats/cat-block sleep=true}}
-    {{/unless}}
-  {{/each}}
-</ul>
-
-<h2>Cats that are sleepy!</h2>
-
-<ul>
-  {{#each cats}}
-    {{#if sleepy}}
-      {{> cats/cat-block sleep=false}}
-    {{/if}}
-  {{/each}}
-</ul>
-
-<h2>Add a Burger</h2>
+<h2>Eat-Da-Burger!</h2>
 <form class="create-form">
 
   <div class="form-group">
-    <label for="bun">Burger Name:</label>
     <input type="text" id="bun" name="name">
   </div>
 
-  <div class="form-group">
-    <label for="slee">Sleepy?</label><br>
-    <input type="radio" name="sleepy" value="1" checked> Sleepy!<br>
-    <input type="radio" name="sleepy" value="0"> Awake
-  </div>
-
-  <button type="submit">Add Cat</button>
+  <button type="submit">Submit</button>
+  <p>Enter a burger you want to eat then click the "Submit" button</p>
 </form>
