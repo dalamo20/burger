@@ -26,7 +26,7 @@ $(function() {
       event.preventDefault();
   
       var newBurger = {
-        name: $("#ca").val().trim(),
+        name: $("#bun").val().trim(),
         sleepy: $("[name=sleepy]:checked").val().trim()
       };
   
