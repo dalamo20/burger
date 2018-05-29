@@ -15,7 +15,7 @@ router.get("/", function(req, res) {
     res.render("index", hbsObject);
   });
 });
-
+//create new burger
 router.post("/api/burgers", function(req, res) {
   cat.create([
     "name", "sleepy"
