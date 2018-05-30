@@ -5,20 +5,31 @@
 <form class="create-form">
 
   <!--Need to append new burgers here and add "devour" btn-->
-  <ul>
-    {{#each burgers}}
-    <li>
-      <p>{{this.id}}.{{this.burger_name}}</p>
-      <button type="submit">Devour It!</button>
-    </li>
-    {{/each}}
-  </ul>
+  <h3>Ready to Eat!</h3>
+<ul>
+  {{#each cats}}
+    {{#if sleepy}}
+      {{> cats/cat-block sleep=false}}
+    {{/if}}
+  {{/each}}
+</ul>
 
   <!--Need to add area for devoured burgers (after "devour" btn is hit)-->
+  <h3>All Done!</h3>
+<ul>
+  {{#each cats}}
+    {{#unless sleepy}}
+      {{> cats/cat-block sleep=true}}
+    {{/unless}}
+  {{/each}}
+</ul>
 
-  <form action="/" method="POST">
-    <textarea type="text" name="burger_name"></textarea>
+  <h2>Add a Burger</h2>
+<form class="create-form">
 
+  <div class="form-group">
+    <input type="text" id="ca" name="name">
+  </div>
     <button type="submit">Submit</button>
     <p>Enter a burger you want to eat then click the "Submit" button</p>
   </form>
