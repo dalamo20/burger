@@ -11,7 +11,7 @@
     <p>
       {{this.id}}. {{this.burger}}
 
-      <button data-planid="{{this.id}}" class="devburger">Devour It!</button>
+      <button data-newDevour="{{devour}}" data-id="{{this.id}}" class="devburger">Devour It!</button>
     </p>
   </li>
   {{/each}}
@@ -25,7 +25,7 @@
     <p>
       {{this.id}}. {{this.burger}}
 
-      <button data-planid="{{this.id}}" class="delburger">Delete</button>
+      <button data-id="{{this.id}}" class="delburger">Delete</button>
     </p>
   </li>
   {{/each}}
@@ -35,69 +35,89 @@
 <form class="create-form" id="makeBurger">
 
   <div class="form-group">
-    <input type="text" id="bun" name="name">
+    <textarea type="text" name="plan"></textarea>
   </div>
   <button type="submit">Submit</button>
-  <p>Enter a burger you want to eat then click the "Submit" button</p>
+  <p>Enter a burger you crave then click the "Submit" button</p>
 </form>
 
 <script type="text/javascript">
-  $(".delburger").on("click", function (event) {
-    var id = $(this).data("planid");
+  $(function () {
+    $(".devburger").on("click", function (event) {
+      var id = $(this).data("id");
+      var newDevour = $(this).data("newDevour");
 
-    // Send the DELETE request.
-    $.ajax("/todos/" + id, {
-      type: "DELETE"
-    }).then(
-      function () {
-        console.log("deleted id ", id);
-        // Reload the page to get the updated list
-        location.reload();
-      }
-    );
-  });
+      var newDevourState = {
+        devoured: newDevour
+      };
 
-  $("#makeBurger").on("submit", function (event) {
-    // Make sure to preventDefault on a submit event.
-    event.preventDefault();
+      // Send the PUT request.
+      $.ajax("/api/burgers/:id" + id, {
+        type: "PUT",
+        data: newDevourState
+      }).then(
+        function () {
+          console.log("changed devour to", newDevour);
+          // Reload the page to get the updated list
+          location.reload();
+        }
+      );
 
-    var newBurger = {
-      plan: $("#createplan [name=plan]").val().trim()
-    };
+      /* $(".delburger").on("click", function (event) {
+        var id = $(this).data("id");
+        $.ajax("/todos/" + id, {
+          type: "DELETE"
+        }).then(
+          function () {
+            console.log("deleted id ", id);
+            location.reload();
+          }
+        );
+      }); */
 
-    // Send the POST request.
-    $.ajax("/todos", {
-      type: "POST",
-      data: newPlan
-    }).then(
-      function () {
-        console.log("created new plan");
-        // Reload the page to get the updated list
-        location.reload();
-      }
-    );
-  });
+      $("#makeBurger").on("submit", function (event) {
+        // Make sure to preventDefault on a submit event.
+        event.preventDefault();
 
-  $("#updateplan").on("submit", function (event) {
-    // Make sure to preventDefault on a submit event.
-    event.preventDefault();
+        var newBurger = {
+          burger_name: $("#makeBurger [name=plan]").val().trim()
+        };
 
-    var id = $("[name=id]").val().trim();
+        // Send the POST request.
+        $.ajax("/api/burgers", {
+          type: "POST",
+          data: newBurger
+        }).then(
+          function () {
+            console.log("created new burger");
+            // Reload the page to get the updated list
+            location.reload();
+          }
+        );
+      });
 
-    var updatedPlan = {
-      plan: $("#updateplan [name=plan]").val().trim()
-    };
+      /*$("#updateplan").on("submit", function (event) {
+        // Make sure to preventDefault on a submit event.
+        event.preventDefault();
 
-    // Send the PUT request.
-    $.ajax("/todos/" + id, {
-      type: "PUT",
-      data: updatedPlan
-    }).then(
-      function () {
-        console.log("updated id ", id);
-        // Reload the page to get the updated list
-        location.reload();
-      }
-    );
+        var id = $("[name=id]").val().trim();
+
+        var updatedPlan = {
+          plan: $("#updateplan [name=plan]").val().trim()
+        };
+
+        // Send the PUT request.
+        $.ajax("/todos/" + id, {
+          type: "PUT",
+          data: updatedPlan
+        }).then(
+          function () {
+            console.log("updated id ", id);
+            // Reload the page to get the updated list
+            location.reload();
+          }
+        );
+      });*/
+    });
   });
 </script>
