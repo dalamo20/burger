@@ -6,36 +6,35 @@
 <!--Need to append new burgers here and add "devour" btn-->
 <h3>Ready to Eat!</h3>
 <ul>
-  {{#each burgers}}
+  {{#each burgers}} {{#unless this.devoured}}
   <li>
     <p>
-      {{this.id}}. {{this.burger_name}}
+      {{this.id}}.{{this.burger_name}}
 
-      <button data-newDevour="{{devour}}" data-id="{{this.id}}" class="devburger">Devour It!</button>
+      <button data-id="{{this.id}}" class="devburger">Devour It!</button>
     </p>
   </li>
-  {{/each}}
+  {{/unless}} {{/each}}
 </ul>
 
 <!--Need to add area for devoured burgers (after "devour" btn is hit)-->
 <h3>All Done!</h3>
 <ul>
-  {{#each burgers}}
+  {{#each burgers}} {{#if this.devoured}}
   <li>
     <p>
-      {{this.id}}. {{this.burger}}
-
-      <button data-id="{{this.id}}" class="delburger">Delete</button>
+      {{this.id}}. {{this.burger_name}} {{!--
+      <button data-id="{{this.id}}" class="delburger">Delete</button> --}}
     </p>
   </li>
-  {{/each}}
+  {{/if}} {{/each}}
 </ul>
 
 <h2>Add a Burger</h2>
 <form class="create-form" id="makeBurger">
 
   <div class="form-group">
-    <textarea id="makeBurger" type="text" name="plan"></textarea>
+    <textarea id="burgerName" type="text" name="plan"></textarea>
   </div>
   <button type="submit">Submit</button>
   <p>Enter a burger you crave then click the "Submit" button</p>
@@ -46,32 +45,33 @@
   $("#makeBurger").on("submit", function (event) {
     event.preventDefault();
     var newBuns = {
-      burger_name: $("#makeBurger").val().trim()
+      burger_name: $("#burgerName").val().trim()
+    };
     console.log("This is new created burger ", newBuns);
-      );
 
-  // Send the POST request.
-  $.ajax("/api/burgers", {
-    type: "POST",
-    data: newBurger
-  }).then(
-    function () {
-      console.log("created new burger");
-      // Reload the page to get the updated list
-      location.reload();
-    }
-  );
+    // Send the POST request.
+    $.ajax("/burgers", {
+      method: "POST",
+      data: newBuns
+    }).then(
+      function () {
+        console.log("created new burger");
+          // Reload the page to get the updated list
+        location.reload();
+      }
+    );
   });
 
-  // Send the PUT request.
-  $.ajax("/api/burgers/:id" + id, {
-    type: "PUT",
-    data: newDevourState
-  }).then(
-    function () {
-      console.log("changed devour to", newDevour);
-      // Reload the page to get the updated list
-      location.reload();
-    }
-  );
+  $(".devburger").on("click", function () {
+    var id = $(this).data("id");
+    console.log(id);
+    // Send the PUT request.
+    $.ajax({
+      method: "PUT",
+      url: "/burgers/" + id, 
+    }).then(function (data) {
+        // Reload the page to get the updated list
+       location.reload();
+      });
+  });
 </script>

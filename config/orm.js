@@ -1,10 +1,10 @@
-var connection = require("../config/connection");
+var connection = require("./connection");
 
 // Object for all our SQL statement functions.
 var orm = {
   selectAll: function (tableInput, cb) {
-    var queryString = "SELECT * FROM " + tableInput + ";";
-    connection.query(queryString, function (err, result) {
+    var queryString = "SELECT * FROM ??";
+    connection.query(queryString, [tableInput],function (err, result) {
       if (err) {
         throw err;
       }
@@ -12,18 +12,11 @@ var orm = {
     });
   },
   insertOne: function (table, cols, vals, cb) {
-    var queryString = "INSERT INTO " + table;
-
-    queryString += " (";
-    queryString += cols.toString();
-    queryString += ") ";
-    queryString += "VALUES (";
-    queryString += printQuestionMarks(vals.length);
-    queryString += ") ";
+    var queryString = "INSERT INTO ?? (??) VALUES (?)";
 
     console.log(queryString);
 
-    connection.query(queryString, vals, function (err, result) {
+    connection.query(queryString, [table, cols, vals], function (err, result) {
       if (err) {
         throw err;
       }
@@ -32,15 +25,11 @@ var orm = {
   },
   // An example of objColVals would be {name: panther, sleepy: true}
   updateOne: function (table, objColVals, condition, cb) {
-    var queryString = "UPDATE " + table;
-
-    queryString += " SET ";
-    queryString += objToSql(objColVals);
-    queryString += " WHERE ";
-    queryString += condition;
+    var queryString = "UPDATE ?? SET ? WHERE ?";
 
     console.log(queryString);
-    connection.query(queryString, function (err, result) {
+    console.log(table, objColVals, condition)
+    connection.query(queryString, [table, objColVals, condition], function (err, result) {
       if (err) {
         throw err;
       }
